@@ -3,8 +3,7 @@ require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
 
--- EXAMPLE
-local servers = { "html", "cssls" }
+local servers = { "html", "cssls", "clangd", "clang-format" }
 local nvlsp = require "nvchad.configs.lspconfig"
 
 -- lsps with default config
@@ -39,10 +38,10 @@ lspconfig.gdscript.setup({
     capabilities = nvlsp.capabilities,
 })
 
-lspconfig.csharp_ls.setup({
-    capabilities = nvlsp.capabilities,
-})
-
 lspconfig.clangd.setup({
     capabilities = nvlsp.capabilities,
+    on_attach = function(client, bufnr)
+        client.server_capabilities.signatureHelpProvider = false
+        nvlsp.on_attach(client, bufnr)
+    end,
 })
